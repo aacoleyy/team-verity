@@ -1,217 +1,713 @@
 
-import { useState } from 'react'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
-const events = [
+// ======================================
+// DEMO EVENT DATA
+// ======================================
+
+const demoEvents = [
   {
-    id: 1,
-    title: 'Creative Connections',
-    category: 'Arts',
-    date: 'Oct 15, 2026',
-    time: '4:00 PM',
-    location: 'Student Center',
-    description: 'Meet other students and explore your creative side.',
-    emoji: '🎨',
+    id: "event-001",
+    title: "Campus Game Night",
+    date: "2026-10-15",
+    startTime: "6:00 PM",
+    endTime: "8:00 PM",
+    buildingId: "student-center-east",
+    location: "Student Center East",
+    category: "Social",
+    description:
+      "Meet other students, play games, and enjoy a fun evening on campus.",
+    isDemo: true,
   },
   {
-    id: 2,
-    title: 'Campus Game Night',
-    category: 'Gaming',
-    date: 'Oct 16, 2026',
-    time: '6:00 PM',
-    location: 'Student Center',
-    description: 'Play games, relax, and meet people with similar interests.',
-    emoji: '🎮',
+    id: "event-002",
+    title: "Wellness Workshop",
+    date: "2026-10-16",
+    startTime: "2:00 PM",
+    endTime: "3:30 PM",
+    buildingId: "rec-center",
+    location: "Student Recreation Center",
+    category: "Wellness",
+    description:
+      "Learn about stress management and explore ways to support your well-being.",
+    isDemo: true,
   },
   {
-    id: 3,
-    title: 'Study Together',
-    category: 'Academic',
-    date: 'Oct 17, 2026',
-    time: '2:00 PM',
-    location: 'Library',
-    description: 'Bring your coursework and enjoy a relaxed group study session.',
-    emoji: '📚',
+    id: "event-003",
+    title: "Career Networking Mixer",
+    date: "2026-10-20",
+    startTime: "4:00 PM",
+    endTime: "6:00 PM",
+    buildingId: "student-center-west",
+    location: "Student Center West",
+    category: "Career",
+    description:
+      "Connect with fellow students and practice your networking skills.",
+    isDemo: true,
   },
   {
-    id: 4,
-    title: 'Wellness & Journaling',
-    category: 'Wellness',
-    date: 'Oct 18, 2026',
-    time: '3:00 PM',
-    location: 'Campus Green',
-    description: 'Take a break, reflect, and connect with other students.',
-    emoji: '🌱',
+    id: "event-004",
+    title: "Study Together",
+    date: "2026-10-22",
+    startTime: "1:00 PM",
+    endTime: "3:00 PM",
+    buildingId: "library-north",
+    location: "Library North",
+    category: "Academic",
+    description:
+      "Join a casual group study session and meet new study partners.",
+    isDemo: true,
   },
-]
+];
 
-const categories = ['All', 'Arts', 'Gaming', 'Academic', 'Wellness']
+const categories = [
+  "All",
+  "Social",
+  "Academic",
+  "Career",
+  "Wellness",
+];
 
-function App() {
-  const [activeCategory, setActiveCategory] = useState('All')
-  const [savedIds, setSavedIds] = useState([])
-  const [selectedEvent, setSelectedEvent] = useState(null)
-  const [showSaved, setShowSaved] = useState(false)
+// Temporary building data.
+// Your teammate can replace this with buildings.js later.
+const buildings = [
+  {
+    id: "student-center-east",
+    name: "Student Center East",
+  },
+  {
+    id: "student-center-west",
+    name: "Student Center West",
+  },
+  {
+    id: "rec-center",
+    name: "Student Recreation Center",
+  },
+  {
+    id: "library-north",
+    name: "Library North",
+  },
+];
 
-  const filteredEvents = events.filter((event) => {
-    const matchesCategory =
-      activeCategory === 'All' || event.category === activeCategory
+// ======================================
+// HELPER FUNCTIONS
+// ======================================
 
-    const matchesSaved = !showSaved || savedIds.includes(event.id)
+function formatDate(dateString) {
+  return new Date(`${dateString}T12:00:00`).toLocaleDateString(
+    "en-US",
+    {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }
+  );
+}
 
-    return matchesCategory && matchesSaved
-  })
+// ======================================
+// EVENT CARD COMPONENT
+// ======================================
+
+function EventCard({
+  event,
+  isSaved,
+  onToggleSave,
+  onViewDetails,
+}) {
+  return (
+    <article className="event-card">
+      <div className="event-card-top">
+        <span className="category-badge">
+          {event.category}
+        </span>
+
+        {event.isDemo && (
+          <span className="demo-label">
+            Demo event
+          </span>
+        )}
+      </div>
+
+      <h3>{event.title}</h3>
+
+      <p>📅 {formatDate(event.date)}</p>
+
+      <p>
+        🕒 {event.startTime} – {event.endTime}
+      </p>
+
+      <p>📍 {event.location}</p>
+
+      <div className="event-actions">
+        <button
+          className="details-button"
+          onClick={() => onViewDetails(event)}
+        >
+          View details
+        </button>
+
+        <button
+          className={`save-button ${
+            isSaved ? "saved" : ""
+          }`}
+          onClick={() => onToggleSave(event.id)}
+          aria-label={
+            isSaved ? "Unsave event" : "Save event"
+          }
+        >
+          {isSaved ? "♥ Saved" : "♡ Save"}
+        </button>
+      </div>
+    </article>
+  );
+}
+
+// ======================================
+// MAIN APP COMPONENT
+// ======================================
+
+export default function App() {
+  // Navigation
+  const [activeTab, setActiveTab] = useState("home");
+
+  // Category filters
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
+
+  // Event details popup
+  const [selectedEvent, setSelectedEvent] =
+    useState(null);
+
+  // Home search
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Map search
+  const [mapSearch, setMapSearch] = useState("");
+
+  // Selected building
+  const [selectedBuildingId, setSelectedBuildingId] =
+    useState(null);
+
+  // Collapsible map events panel
+  const [sheetPosition, setSheetPosition] =
+    useState("collapsed");
+
+  // Saved events
+  const [savedIds, setSavedIds] = useState(() => {
+    try {
+      const stored = localStorage.getItem(
+        "verity-saved-events"
+      );
+
+      const parsed = stored
+        ? JSON.parse(stored)
+        : [];
+
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Save bookmarks to local storage
+  useEffect(() => {
+    localStorage.setItem(
+      "verity-saved-events",
+      JSON.stringify(savedIds)
+    );
+  }, [savedIds]);
+
+  // ======================================
+  // EVENT FUNCTIONS
+  // ======================================
 
   function toggleSaved(id) {
     setSavedIds((previous) =>
       previous.includes(id)
         ? previous.filter((savedId) => savedId !== id)
         : [...previous, id]
-    )
+    );
   }
 
+  function selectBuilding(id) {
+    setSelectedBuildingId(id);
+    setMapSearch("");
+    setSheetPosition("half");
+  }
+
+  function cycleSheetPosition() {
+    setSheetPosition((previous) => {
+      if (previous === "collapsed") {
+        return "half";
+      }
+
+      if (previous === "half") {
+        return "expanded";
+      }
+
+      return "collapsed";
+    });
+  }
+
+  // ======================================
+  // FILTERED DATA
+  // ======================================
+
+  const filteredEvents = demoEvents.filter((event) => {
+    const matchesCategory =
+      selectedCategory === "All" ||
+      event.category === selectedCategory;
+
+    const query = searchQuery.trim().toLowerCase();
+
+    const matchesSearch = [
+      event.title,
+      event.location,
+      event.description,
+      event.category,
+    ].some((value) =>
+      value.toLowerCase().includes(query)
+    );
+
+    return matchesCategory && matchesSearch;
+  });
+
+  const savedEvents = demoEvents.filter((event) =>
+    savedIds.includes(event.id)
+  );
+
+  const matchingBuildings = buildings.filter(
+    (building) =>
+      building.name
+        .toLowerCase()
+        .includes(mapSearch.trim().toLowerCase())
+  );
+
+  const selectedBuilding = buildings.find(
+    (building) =>
+      building.id === selectedBuildingId
+  );
+
+  const buildingEvents = demoEvents.filter(
+    (event) =>
+      event.buildingId === selectedBuildingId
+  );
+
+  // ======================================
+  // RENDER EVENT LIST
+  // ======================================
+
+  function renderEventList(eventsToDisplay) {
+    if (eventsToDisplay.length === 0) {
+      return (
+        <div className="empty-state">
+          <p>No matching events found.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="event-list">
+        {eventsToDisplay.map((event) => (
+          <EventCard
+            key={event.id}
+            event={event}
+            isSaved={savedIds.includes(event.id)}
+            onToggleSave={toggleSaved}
+            onViewDetails={setSelectedEvent}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // ======================================
+  // APP LAYOUT
+  // ======================================
+
   return (
-    <main className="app">
-      <header className="topbar">
-        <a className="brand" href="#" onClick={() => {
-          setShowSaved(false)
-          setActiveCategory('All')
-          setSelectedEvent(null)
-        }}>
-          <span className="brand-icon">✿</span>
-          CommonGround
-        </a>
+    <div
+      className={`app ${
+        activeTab === "map" ? "map-mode" : ""
+      }`}
+    >
+      {/* ==================================
+          HEADER
+      ================================== */}
 
-        <button
-          className={`nav-button ${!showSaved ? 'active' : ''}`}
-          onClick={() => setShowSaved(false)}
-        >
-          Explore
-        </button>
+      {activeTab !== "map" && (
+        <header className="app-header">
+          <div className="header-top">
+            <h1>verity.</h1>
 
-        <button
-          className={`nav-button ${showSaved ? 'active' : ''}`}
-          onClick={() => setShowSaved(true)}
-        >
-          Saved ({savedIds.length})
-        </button>
-      </header>
-
-      <section className="welcome">
-        <p className="eyebrow">YOUR CAMPUS, YOUR COMMUNITY</p>
-        <h1>Find your people, <span>one event at a time.</span></h1>
-        <p className="subtitle">
-          Little moments can lead to great connections. Find something that feels like you.
-        </p>
-      </section>
-
-      <section className="discover">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">{showSaved ? 'YOUR COLLECTION' : 'MADE FOR YOU'}</p>
-            <h2>{showSaved ? 'Your saved events' : 'Explore events'}</h2>
+            {activeTab === "home" && (
+              <button
+                className="search-icon-button"
+                aria-label="Search events"
+                aria-expanded={showSearch}
+                onClick={() =>
+                  setShowSearch((previous) => !previous)
+                }
+              >
+                {showSearch ? "✕" : "🔍"}
+              </button>
+            )}
           </div>
-          <span className="event-count">
-            {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
-          </span>
-        </div>
 
-        <div className="filters" aria-label="Filter events by category">
-          {categories.map((category) => (
-            <button
-              key={category}
-              className={`filter-button ${activeCategory === category ? 'selected' : ''}`}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+          <p>
+            Find your people. Find your place.
+          </p>
 
-        {filteredEvents.length === 0 ? (
-          <div className="empty-state">
-            <span>🌷</span>
-            <h3>No events here just yet</h3>
-            <p>Try another category or explore more events.</p>
-            <button onClick={() => {
-              setActiveCategory('All')
-              setShowSaved(false)
-            }}>
-              Explore all events
-            </button>
-          </div>
-        ) : (
-          <div className="event-grid">
-            {filteredEvents.map((event) => (
-              <article className="event-card" key={event.id}>
-                <div className={`event-art art-${event.category.toLowerCase()}`}>
-                  <span className="event-emoji">{event.emoji}</span>
-                  <span className="category-tag">{event.category}</span>
-                  <button
-                    className={`save-button ${savedIds.includes(event.id) ? 'is-saved' : ''}`}
-                    onClick={() => toggleSaved(event.id)}
-                    aria-label={savedIds.includes(event.id) ? 'Unsave event' : 'Save event'}
-                    title={savedIds.includes(event.id) ? 'Unsave event' : 'Save event'}
-                  >
-                    {savedIds.includes(event.id) ? '♥' : '♡'}
-                  </button>
-                </div>
+          {activeTab === "home" && showSearch && (
+            <input
+              className="home-search-input"
+              type="search"
+              placeholder="Search events..."
+              aria-label="Search events"
+              value={searchQuery}
+              onChange={(event) =>
+                setSearchQuery(event.target.value)
+              }
+            />
+          )}
+        </header>
+      )}
 
-                <div className="event-content">
-                  <p className="event-date">{event.date} · {event.time}</p>
-                  <h3>{event.title}</h3>
-                  <p className="event-location">⌖ {event.location}</p>
-                  <button
-                    className="details-button"
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    View details <span>→</span>
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
+      {/* ==================================
+          MAIN CONTENT
+      ================================== */}
+
+      <main className="app-content">
+
+        {/* ================================
+            HOME PAGE
+        ================================ */}
+
+        {activeTab === "home" && (
+          <section>
+            <h2>Discover events</h2>
+
+            <p className="section-subtitle">
+              Find something that interests you.
+            </p>
+
+            <div className="category-filters">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={
+                    selectedCategory === category
+                      ? "selected"
+                      : ""
+                  }
+                  onClick={() =>
+                    setSelectedCategory(category)
+                  }
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+
+            {renderEventList(filteredEvents)}
+          </section>
         )}
-      </section>
+
+        {/* ================================
+            MAP PAGE
+        ================================ */}
+
+        {activeTab === "map" && (
+          <section className="map-screen">
+
+            {/* CAMPUS MAP IMAGE */}
+            <div className="full-map">
+              <img
+                src="/campus-map.png"
+                alt="Illustrated campus map"
+                onError={(event) => {
+                  event.currentTarget.style.display =
+                    "none";
+                }}
+              />
+            </div>
+
+            {/* MAP SEARCH BAR */}
+            <div className="map-search-area">
+              <div className="map-search">
+                <span aria-hidden="true">
+                  🔍
+                </span>
+
+                <input
+                  type="search"
+                  placeholder="Search campus buildings..."
+                  aria-label="Search campus buildings"
+                  value={mapSearch}
+                  onChange={(event) =>
+                    setMapSearch(event.target.value)
+                  }
+                />
+              </div>
+
+              {/* BUILDING SEARCH RESULTS */}
+              {mapSearch.trim() !== "" && (
+                <div className="map-search-results">
+                  {matchingBuildings.length === 0 ? (
+                    <p>
+                      No matching buildings found.
+                    </p>
+                  ) : (
+                    matchingBuildings.map((building) => (
+                      <button
+                        key={building.id}
+                        onClick={() =>
+                          selectBuilding(building.id)
+                        }
+                      >
+                        📍 {building.name}
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* ============================
+                COLLAPSIBLE EVENTS PANEL
+            ============================ */}
+
+            <div
+              className={`events-sheet ${sheetPosition}`}
+            >
+              {/* CLICKABLE PANEL HANDLE */}
+              <button
+                className="sheet-handle-button"
+                onClick={cycleSheetPosition}
+                aria-expanded={
+                  sheetPosition !== "collapsed"
+                }
+                aria-label="Expand or collapse events panel"
+              >
+                <span className="sheet-handle" />
+
+                <div className="sheet-header">
+                  <div>
+                    <h3>
+                      {selectedBuilding
+                        ? selectedBuilding.name
+                        : "Explore events"}
+                    </h3>
+
+                    <p>
+                      {selectedBuilding
+                        ? `${buildingEvents.length} event(s) at this location`
+                        : "Discover what's happening on campus"}
+                    </p>
+                  </div>
+
+                  <span className="sheet-arrow">
+                    {sheetPosition === "expanded"
+                      ? "⌄"
+                      : "⌃"}
+                  </span>
+                </div>
+              </button>
+
+              {/* PANEL CONTENT */}
+              {sheetPosition !== "collapsed" && (
+                <div className="sheet-content">
+                  {selectedBuilding ? (
+                    <>
+                      <button
+                        className="clear-building-button"
+                        onClick={() => {
+                          setSelectedBuildingId(null);
+                        }}
+                      >
+                        ← Show all events
+                      </button>
+
+                      {renderEventList(buildingEvents)}
+                    </>
+                  ) : (
+                    renderEventList(demoEvents)
+                  )}
+                </div>
+              )}
+            </div>
+
+          </section>
+        )}
+
+        {/* ================================
+            SAVED PAGE
+        ================================ */}
+
+        {activeTab === "saved" && (
+          <section>
+            <h2>Saved events</h2>
+
+            <p className="section-subtitle">
+              Keep track of events you're interested in.
+            </p>
+
+            {savedEvents.length === 0 ? (
+              <div className="empty-state">
+                <span>♡</span>
+
+                <h3>Nothing saved yet</h3>
+
+                <p>
+                  Browse events and tap Save to add
+                  them here.
+                </p>
+
+                <button
+                  className="details-button"
+                  onClick={() =>
+                    setActiveTab("home")
+                  }
+                >
+                  Explore events
+                </button>
+              </div>
+            ) : (
+              renderEventList(savedEvents)
+            )}
+          </section>
+        )}
+
+      </main>
+
+      {/* ==================================
+          BOTTOM NAVIGATION
+      ================================== */}
+
+      <nav
+        className="bottom-nav"
+        aria-label="Main navigation"
+      >
+        <button
+          className={
+            activeTab === "home" ? "active" : ""
+          }
+          onClick={() => setActiveTab("home")}
+        >
+          <span>⌂</span>
+          Home
+        </button>
+
+        <button
+          className={
+            activeTab === "map" ? "active" : ""
+          }
+          onClick={() => setActiveTab("map")}
+        >
+          <span>🗺️</span>
+          Map
+        </button>
+
+        <button
+          className={
+            activeTab === "saved" ? "active" : ""
+          }
+          onClick={() => setActiveTab("saved")}
+        >
+          <span>♡</span>
+          Saved
+        </button>
+      </nav>
+
+      {/* ==================================
+          EVENT DETAILS POPUP
+      ================================== */}
 
       {selectedEvent && (
-        <div className="modal-backdrop" onClick={() => setSelectedEvent(null)}>
-          <section
+        <div
+          className="modal-overlay"
+          onClick={() =>
+            setSelectedEvent(null)
+          }
+        >
+          <div
             className="event-modal"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="modal-title"
-            onClick={(e) => e.stopPropagation()}
+            aria-labelledby="event-modal-title"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
-            <button className="modal-close" onClick={() => setSelectedEvent(null)}>
+            <button
+              className="close-button"
+              onClick={() =>
+                setSelectedEvent(null)
+              }
+              aria-label="Close event details"
+            >
               ✕
             </button>
-            <span className="modal-emoji">{selectedEvent.emoji}</span>
-            <p className="eyebrow">{selectedEvent.category} EVENT</p>
-            <h2 id="modal-title">{selectedEvent.title}</h2>
-            <p>{selectedEvent.description}</p>
-            <p><strong>Date:</strong> {selectedEvent.date}</p>
-            <p><strong>Time:</strong> {selectedEvent.time}</p>
-            <p><strong>Location:</strong> {selectedEvent.location}</p>
-            <button
-              className="primary-button"
-              onClick={() => toggleSaved(selectedEvent.id)}
-            >
-              {savedIds.includes(selectedEvent.id) ? '♥ Saved — remove bookmark' : '♡ Save this event'}
-            </button>
-            <p className="demo-note">
-              Demo event — replace with a verified campus listing before presenting.
+
+            <span className="category-badge">
+              {selectedEvent.category}
+            </span>
+
+            {selectedEvent.isDemo && (
+              <p className="demo-notice">
+                This is a fictional demo event.
+              </p>
+            )}
+
+            <h2 id="event-modal-title">
+              {selectedEvent.title}
+            </h2>
+
+            <p>
+              📅 {formatDate(selectedEvent.date)}
             </p>
-          </section>
+
+            <p>
+              🕒 {selectedEvent.startTime} –{" "}
+              {selectedEvent.endTime}
+            </p>
+
+            <p>
+              📍 {selectedEvent.location}
+            </p>
+
+            <h3>About this event</h3>
+
+            <p>
+              {selectedEvent.description}
+            </p>
+
+            {selectedEvent.sourceUrl && (
+              <a
+                href={selectedEvent.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View original event listing
+              </a>
+            )}
+
+            <button
+              className="modal-save-button"
+              onClick={() =>
+                toggleSaved(selectedEvent.id)
+              }
+            >
+              {savedIds.includes(selectedEvent.id)
+                ? "♥ Remove from saved"
+                : "♡ Save this event"}
+            </button>
+          </div>
         </div>
       )}
 
-      <footer>
-        <span className="brand-icon">✿</span>
-        CommonGround · A student-built campus discovery prototype
-      </footer>
-    </main>
-  )
+    </div>
+  );
 }
-
-export default App
