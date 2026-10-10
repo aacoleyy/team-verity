@@ -75,21 +75,31 @@ const buildings = [
   {
     id: "student-center-east",
     name: "Student Center East",
+    aliases: ["sce", "student center e", "east student center"],
   },
   {
     id: "student-center-west",
     name: "Student Center West",
+    aliases: ["scw", "student center w", "west student center"],
   },
   {
     id: "rec-center",
     name: "Student Recreation Center",
+    aliases: [
+      "rec",
+      "student rec",
+      "rec center",
+      "recreation center",
+      "gym",
+      "src",
+    ],
   },
   {
     id: "library-north",
     name: "Library North",
+    aliases: ["library", "lib", "north library", "ln"],
   },
 ];
-
 // ======================================
 // HELPER FUNCTIONS
 // ======================================
@@ -278,12 +288,23 @@ export default function App() {
     savedIds.includes(event.id)
   );
 
-  const matchingBuildings = buildings.filter(
-    (building) =>
-      building.name
-        .toLowerCase()
-        .includes(mapSearch.trim().toLowerCase())
-  );
+  const normalizeSearch = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+  
+  const matchingBuildings = buildings.filter((building) => {
+    const query = normalizeSearch(mapSearch);
+  
+    const searchTerms = [
+      building.name,
+      ...(building.aliases || []),
+    ];
+  
+    return searchTerms.some((term) =>
+      normalizeSearch(term).includes(query)
+    );
+  });
 
   const selectedBuilding = buildings.find(
     (building) =>
