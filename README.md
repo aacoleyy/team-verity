@@ -13,6 +13,9 @@ Students can discover opportunities that match their interests, save activities 
 
 By simplifying access to campus information, Verity aims to reduce barriers to participation and help students feel more connected to their university community.
 
+## Demo Video
+Link: https://youtube.com/shorts/vGezZmnH00s?feature=share
+
 ## Main Features
 ### Event Discovery
 * Browse campus events on the Home page.
