@@ -94,6 +94,30 @@ const events = [
 
   },
 
+  {
+
+    id: "club-panther-silent-party-2026-10-12",
+
+    title: "Club Panther: Silent Headphone Party",
+
+    category: "Social",
+
+    date: "2026-10-12",
+
+    time: "6:00 PM – 9:00 PM",
+
+    location: "Student Center East, Ballroom",
+
+    buildingId: "student-center-east",
+
+    description: "Club Panther brings the party to campus with a fun nightlife-style experience made just for students. Guests will receive wireless headphones that let them switch between different music channels, so everyone can choose the sound that fits their vibe. Don’t miss the chance to dance, sing, and enjoy the night with friends. Whether you’re into hip-hop, R&B, Afrobeats, throwbacks, or pop, Club Panther has something for everyone.",
+
+    flyerUrl: "/events/club-panther-silent-party.jpg",
+
+    sourceUrl: null,
+
+  },
+
 ];
 
 const buildings = [
