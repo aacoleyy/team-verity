@@ -70,6 +70,30 @@ const events = [
 
   },
 
+  {
+
+    id: "hot-wings-hot-topics-2026-10-12",
+
+    title: "Hot Wings Hot Topics",
+
+    category: "Social",
+
+    date: "2026-10-12",
+
+    time: "4:00 PM – 5:15 PM",
+
+    location: "Student Center East, Intersection Lounge",
+
+    buildingId: "student-center-east",
+
+    description: "Get ready for a flavor-packed evening where the wings are spicy and the conversations are even hotter! Join us for Hot Wings & Hot Topics, an open forum where students come together to enjoy free hot wings and dive into bold, unfiltered discussions about everything from pop culture and politics to campus life and personal passions. Whether you're here to speak your mind, hear new perspectives, or just vibe with fellow Panthers over some seriously good food, this is the place to be. No topic is off the table; just bring your appetite and your voice.",
+
+    flyerUrl: "/events/hot-wings-hot-topics.jpg",
+
+    sourceUrl: null,
+
+  },
+
 ];
 
 const buildings = [
@@ -144,7 +168,7 @@ const demoFriends = [
 
     color: "#f1afcb",
 
-    eventId: "crc-quiet-hours-2026-10-12",
+    eventId: "hot-wings-hot-topics-2026-10-12",
 
     status: "Going",
 
