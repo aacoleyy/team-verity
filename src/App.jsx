@@ -142,6 +142,30 @@ const events = [
 
   },
 
+  {
+
+    id: "atlanta-campus-safety-walk-2026-10-14",
+
+    title: "Atlanta Campus Safety Walk",
+
+    category: "Wellness",
+
+    date: "2026-10-14",
+
+    time: "7:00 PM – 8:00 PM",
+
+    location: "Dahlberg Hall, Ground Level",
+
+    buildingId: "dahlberg-hall",
+
+    description: "Campus Safety Walks provide an opportunity for students, faculty, staff, and community members to partner with Georgia State University Police and university officials in identifying safety concerns around campus. During these walks, participants are encouraged to report unsafe conditions such as missing or non-functioning streetlights, damaged sidewalks, overgrown landscaping, inadequate signage, emergency equipment concerns, and other environmental issues that may affect the safety and security of our campus community. The goal is to proactively identify hazards and improve campus safety for everyone.",
+
+    flyerUrl: "/events/atlanta-campus-safety-walk.jpg",
+
+    sourceUrl: null,
+
+  },
+
 ];
 
 const buildings = [
@@ -183,6 +207,16 @@ const buildings = [
     name: "Library North",
 
     aliases: ["library", "lib", "north library", "ln"],
+
+  },
+
+  {
+
+    id: "dahlberg-hall",
+
+    name: "Dahlberg Hall",
+
+    aliases: ["dahlberg", "dahlberg hall", "dh"],
 
   },
 
