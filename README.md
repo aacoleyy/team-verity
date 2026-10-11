@@ -82,8 +82,8 @@ npm install
 4. Create a local `.env` file for the Vite frontend using the Auth0 values provided by the team (do not commit credentials):
 
 ```env
-VITE_AUTH0_DOMAIN=your-auth0-domain**
-**VITE_AUTH0_CLIENT_ID=your-auth0-client-id
+VITE_AUTH0_DOMAIN=your-auth0-domain
+VITE_AUTH0_CLIENT_ID=your-auth0-client-id
 ```
 
 Confirm the variable names against src/main.jsx before running; Auth0 audience or redirect settings may also be required by the project's configuration. Add the local development URL to the allowed callback, logout, and web-origin settings in Auth0 as appropriate.
