@@ -118,6 +118,30 @@ const events = [
 
   },
 
+  {
+
+    id: "crc-read-the-room-2026-10-13",
+
+    title: "Read the Room: Collegiate Recovery Community Book Club",
+
+    category: "Wellness",
+
+    date: "2026-10-13",
+
+    time: "3:00 PM – 5:00 PM",
+
+    location: "Student Center West, Room 482",
+
+    buildingId: "student-center-west",
+
+    description: "Have you ever attended a book club that chose a book you're really not interested in reading? Have you ever wished you had the time to sit in a quiet space and read a book, but school or work has had you putting it off? Have you ever attended a support group where you wanted to talk about what you were reading or how life is going, but weren't able to? Great news! The CRC has created a two-part book club, where students are able to sit in silence and read a book of their choice for the first half, and transition into an unstructured group discussion for the second half. Read the Room can help students carve out time to read a book they are interested in, engage in self-care, and socialize with fellow readers. Students are welcome to participate in one or both parts. If you have any questions, please do not hesitate to contact the CRC: crc@gsu.edu",
+
+    flyerUrl: "/events/crc-read-the-room.jpg",
+
+    sourceUrl: null,
+
+  },
+
 ];
 
 const buildings = [
