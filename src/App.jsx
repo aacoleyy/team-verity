@@ -42,101 +42,29 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 import "./App.css";
 
-// DEMO EVENTS - Replace with verified PIN listings later.
+// EVENTS - Real campus events. Do not link to the original PIN listing.
 
 const events = [
 
   {
 
-    id: "demo-1",
+    id: "crc-quiet-hours-2026-10-12",
 
-    title: "Campus Game Night",
-
-    category: "Social",
-
-    date: "2026-10-15",
-
-    time: "6:00 PM – 8:00 PM",
-
-    location: "Student Center East",
-
-    buildingId: "student-center-east",
-
-    description: "Play games, meet students, and enjoy a relaxed campus hangout.",
-
-    flyerUrl: null,
-
-    sourceUrl: null,
-
-  },
-
-  {
-
-    id: "demo-2",
-
-    title: "Wellness Workshop",
-
-    category: "Wellness",
-
-    date: "2026-10-16",
-
-    time: "2:00 PM – 3:30 PM",
-
-    location: "Student Recreation Center",
-
-    buildingId: "rec-center",
-
-    description: "A welcoming workshop focused on taking care of yourself.",
-
-    flyerUrl: null,
-
-    sourceUrl: null,
-
-  },
-
-  {
-
-    id: "demo-3",
-
-    title: "Career Networking Mixer",
-
-    category: "Career",
-
-    date: "2026-10-20",
-
-    time: "4:00 PM – 6:00 PM",
-
-    location: "Student Center West",
-
-    buildingId: "student-center-west",
-
-    description: "Meet peers and explore career opportunities.",
-
-    flyerUrl: null,
-
-    sourceUrl: null,
-
-  },
-
-  {
-
-    id: "demo-4",
-
-    title: "Study Together",
+    title: "Collegiate Recovery Community - Quiet Study Hours",
 
     category: "Academic",
 
-    date: "2026-10-22",
+    date: "2026-10-12",
 
-    time: "3:00 PM – 5:00 PM",
+    time: "10:00 AM – 12:00 PM",
 
-    location: "Library North",
+    location: "Student Center West, Room 482",
 
-    buildingId: "library-north",
+    buildingId: "student-center-west",
 
-    description: "Find a study buddy and make progress on your coursework.",
+    description: "Located in room 482, the CRC has dedicated quiet study hours throughout the week to ensure students in recovery (and their friends) have access to an environment that is beneficial to their academic pursuits. Whether you need a snack, somewhere to focus without distractions, or a place to just...be, we've got you covered. Questions about the Collegiate Recovery can be directed to crc@gsu.edu.",
 
-    flyerUrl: null,
+    flyerUrl: "/events/crc-quiet-hours.jpg",
 
     sourceUrl: null,
 
@@ -216,7 +144,7 @@ const demoFriends = [
 
     color: "#f1afcb",
 
-    eventId: "demo-2",
+    eventId: "crc-quiet-hours-2026-10-12",
 
     status: "Going",
 
@@ -232,7 +160,7 @@ const demoFriends = [
 
     color: "#b6d8c1",
 
-    eventId: "demo-1",
+    eventId: "crc-quiet-hours-2026-10-12",
 
     status: "Interested",
 
@@ -616,11 +544,7 @@ function EventModal({
 
             </a>
 
-          ) : (
-
-            <p className="demo-note">Demo listing — not a live PIN event.</p>
-
-          )}
+          ) : null}
 
         </div>
 
