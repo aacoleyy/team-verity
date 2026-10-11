@@ -214,6 +214,30 @@ const events = [
 
   },
 
+  {
+
+    id: "atlanta-market-day-2026-10-29",
+
+    title: "Atlanta Market Day w/ Student-Made - Oct. 29",
+
+    category: "Social",
+
+    date: "2026-10-29",
+
+    time: "10:00 AM – 3:30 PM",
+
+    location: "Unity Plaza",
+
+    buildingId: "unity-plaza",
+
+    description: "A Spooktacular Market Day Awaits! Halloween theme • Oct. 29 • Unity Plaza • 10 AM–3:30 PM. Come out to Unity Plaza for a frightfully fun Atlanta Market Day! Support your fellow Pantherpreneurs as they showcase their businesses, test big ideas, and bring their hustle to life. From handmade goods to innovative services, you'll find tricks, treats, and tons of talent. Meet the creators from Student-Made, GSU's online marketplace for students to sell their products and services. Be part of the movement—support student entrepreneurs and celebrate creativity right here on campus! 🧡 Costumes encouraged. School spirit required.",
+
+    flyerUrl: null,
+
+    sourceUrl: null,
+
+  },
+
 ];
 
 const buildings = [
@@ -265,6 +289,16 @@ const buildings = [
     name: "Dahlberg Hall",
 
     aliases: ["dahlberg", "dahlberg hall", "dh"],
+
+  },
+
+  {
+
+    id: "unity-plaza",
+
+    name: "Unity Plaza",
+
+    aliases: ["unity", "unity plaza", "plaza"],
 
   },
 
