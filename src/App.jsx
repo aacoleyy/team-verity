@@ -185,7 +185,7 @@ const events = [
 
     description: "The Interdisciplinary Journal Forum (IJF), a student-run journal club operating under the CURCI, is holding a meeting on Tuesday, October 13th at 11:00 am! At IJF meetings, undergraduate students in STEM (especially freshmen, sophomores, and transfer students) have the opportunity to present primary research articles to an audience of their peers, as well as graduate students and faculty/staff. There will also be time for students to network and get connected to potential research mentors at each meeting. Pizza will be served!",
 
-    flyerUrl: null,
+    flyerUrl: "/events/ijf-meeting.jpg",
 
     sourceUrl: null,
 
@@ -209,7 +209,7 @@ const events = [
 
     description: "Have you studied abroad and want to gain valuable leadership and career experience? Join the Study Abroad Programs for an info session about the Study Abroad Alumni Ambassador Program on October 15th from 10AM - 11AM. Discover how you can share your international experience with your peers, advise future GSU students on studying abroad, develop public speaking, event management, and mentorship skills, and expand global opportunities across campus. We will discuss expectations, benefits, application timeline, and how to join our cohort of other international travelers on GSU's campus!",
 
-    flyerUrl: null,
+    flyerUrl: "/events/study-abroad-ambassador.jpg",
 
     sourceUrl: null,
 
