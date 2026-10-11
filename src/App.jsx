@@ -190,6 +190,30 @@ const events = [
 
   },
 
+  {
+
+    id: "study-abroad-ambassador-info-2026-10-15",
+
+    title: "Study Abroad Alumni Ambassador Info Session",
+
+    category: "Career",
+
+    date: "2026-10-15",
+
+    time: "10:00 AM – 11:00 AM",
+
+    location: "Dahlberg Hall, 3rd Floor, Room 350",
+
+    buildingId: "dahlberg-hall",
+
+    description: "Have you studied abroad and want to gain valuable leadership and career experience? Join the Study Abroad Programs for an info session about the Study Abroad Alumni Ambassador Program on October 15th from 10AM - 11AM. Discover how you can share your international experience with your peers, advise future GSU students on studying abroad, develop public speaking, event management, and mentorship skills, and expand global opportunities across campus. We will discuss expectations, benefits, application timeline, and how to join our cohort of other international travelers on GSU's campus!",
+
+    flyerUrl: null,
+
+    sourceUrl: null,
+
+  },
+
 ];
 
 const buildings = [
