@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Auth0Provider } from "@auth0/auth0-react";
-
+import "./index.css";
 import AuthGate from "./AuthGate.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

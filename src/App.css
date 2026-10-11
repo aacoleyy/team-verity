@@ -245,19 +245,25 @@
   letter-spacing: 0.5px;
 }
 
+.
 .tile-art {
   display: grid;
   place-items: center;
   width: 100%;
-  height: 90px;
+  height: 125px;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 .tile-art img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   border-radius: 10px;
 }
+
 
 .tile-title {
   font-size: 14px;
@@ -1217,4 +1223,85 @@
   .friend-activity-card {
     padding: 11px;
   }
+}
+
+
+.friends-manager {
+  margin-bottom: 24px;
+  padding: 18px;
+  background: #fffaf0;
+  border-radius: 18px;
+}
+
+.friends-manager h2 {
+  color: #843b62;
+  margin-bottom: 16px;
+}
+
+.friends-manager-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.friends-manager-tabs button {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 6px;
+  background: #c5c9ef;
+  color: #843b62;
+  cursor: pointer;
+}
+
+.friends-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #e8d5df;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  font: inherit;
+}
+
+.friends-search-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 12px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.friends-search-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.friends-search-info span {
+  color: #8e7c88;
+  font-size: 12px;
+}
+
+.friends-search-result button {
+  border: none;
+  border-radius: 10px;
+  background: #f1afcb;
+  color: #843b62;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.friends-search-result button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.friends-search-hint {
+  text-align: center;
+  color: #8e7c88;
+  font-size: 13px;
+  padding: 18px 8px;
 }

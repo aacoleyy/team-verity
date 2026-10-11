@@ -41,6 +41,7 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 import "./App.css";
+import FriendsManager from "./components/FriendsManager.jsx";
 
 // EVENTS - Real campus events. Do not link to the original PIN listing.
 
@@ -756,6 +757,8 @@ export default function App() {
 
   const { logout, user } = useAuth0();
 
+  const [acceptedFriends, setAcceptedFriends] = useState([]);
+
   const [saved, setSaved] = useState(() => {
 
     const value = readStorage("verity-saved-events", []);
@@ -1267,13 +1270,13 @@ export default function App() {
 
                       <span className="saved-eyebrow">
 
-                        YOUR COLLECTION ♡
+                      ✦ YOUR COLLECTION ✦
 
                       </span>
 
                       <h2>Your little plans.</h2>
 
-                      <p>Good things to look forward to.</p>
+                      <p>Good things to look forward to!</p>
 
                     </div>
 
@@ -1309,7 +1312,7 @@ export default function App() {
 
                   >
 
-                    ♡ My Events
+                  ✦ My Events ✦
 
                   </button>
 
@@ -1337,7 +1340,7 @@ export default function App() {
 
                     <h2 className="saved-section-title">
 
-                      Your saved events
+                      My saved events
 
                     </h2>
 
@@ -1393,16 +1396,13 @@ export default function App() {
 
                     <div className="friends-heading">
 
-                      <h2>Your friends ♡</h2>
-
-                      <span>Demo preview</span>
-
+                      <h2>My friends</h2>
+                      
                     </div>
-
+                    <FriendsManager onFriendsChange={setAcceptedFriends} />
                     <div className="friend-avatars">
 
-                      {demoFriends.map((friend) => (
-
+                    {[...demoFriends, ...acceptedFriends].map((friend) => (
                         <div
 
                           className="friend-avatar-item"

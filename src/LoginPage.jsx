@@ -21,7 +21,7 @@ export default function LoginPage() {
       </div>
 
       <div className="login-card">
-        <div className="login-sparkles">✳ ♡ ✳</div>
+        <div className="login-sparkles">✳ ✦ ✳</div>
 
         <h2>Welcome to Verity!</h2>
 
@@ -50,7 +50,7 @@ export default function LoginPage() {
           Create an account
         </button>
 
-        <small>Made for campus life ♡</small>
+        <small>Made for campus life ✦</small>
       </div>
     </div>
   );
