@@ -233,7 +233,7 @@ const events = [
 
     description: "A Spooktacular Market Day Awaits! Halloween theme • Oct. 29 • Unity Plaza • 10 AM–3:30 PM. Come out to Unity Plaza for a frightfully fun Atlanta Market Day! Support your fellow Pantherpreneurs as they showcase their businesses, test big ideas, and bring their hustle to life. From handmade goods to innovative services, you'll find tricks, treats, and tons of talent. Meet the creators from Student-Made, GSU's online marketplace for students to sell their products and services. Be part of the movement—support student entrepreneurs and celebrate creativity right here on campus! 🧡 Costumes encouraged. School spirit required.",
 
-    flyerUrl: null,
+    flyerUrl: "/events/atlanta-market-day.jpg",
 
     sourceUrl: null,
 
