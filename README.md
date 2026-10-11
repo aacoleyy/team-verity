@@ -1,4 +1,4 @@
-# Verity
+# Verity.
 **Find your people. Find your place.**
 
 Verity is a mobile-first web application designed to help Georgia State University (GSU) students discover opportunities, navigate campus spaces, and feel connected to their university community.
