@@ -1,0 +1,191 @@
+.campus-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+}
+
+.campus-map-gl {
+  position: absolute;
+  inset: 0;
+  background: #a3d47c;
+}
+
+/* A pin: its label on top, the teardrop under it. Anchored at the tip. */
+.campus-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 2px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: var(--depth, 1);
+  /* Only the label and the pin take taps, not the empty space around them. */
+  pointer-events: none;
+}
+
+.campus-marker .campus-pin,
+.campus-marker .campus-pin-label {
+  pointer-events: auto;
+}
+
+.campus-marker.is-selected {
+  z-index: 100;
+}
+
+.campus-pin {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 2.5px solid #4b4540;
+  border-radius: 50% 50% 50% 6px;
+  transform: rotate(-45deg);
+  background: var(--pin, #c9b6ef);
+  box-shadow: 3px 3px 0 #4b454055;
+  transition: transform 160ms ease;
+}
+
+.campus-pin-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fffbea;
+  border: 2px solid #4b4540;
+}
+
+.campus-marker.is-selected .campus-pin {
+  border-color: #7b5cb8;
+  border-width: 3px;
+  transform: rotate(-45deg) scale(1.18);
+}
+
+.campus-pin-count {
+  font-family: Inter, -apple-system, sans-serif;
+  display: inline-grid;
+  place-items: center;
+  min-width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #7b5cb8;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.campus-pin-label {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding: 1px 4px 1px 9px;
+  border: 2px solid #4b4540;
+  border-radius: 10px;
+  background: #fffbea;
+  color: #3b332e;
+  font-family: "Public Sans", sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  box-shadow: 2px 2px 0 #4b454055;
+}
+
+.campus-map .maplibregl-ctrl-attrib {
+  font-size: 10px;
+  background: #fffbeacc;
+}
+
+.pin-editor {
+  position: absolute;
+  z-index: 1000;
+  top: 10px;
+  left: 10px;
+  right: 64px;
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #fffffff2;
+  box-shadow: 0 6px 18px #3a2a5a33;
+  font-size: 12px;
+  color: #44345f;
+}
+
+.pin-editor pre {
+  margin: 0;
+  overflow-x: auto;
+  font-size: 11px;
+}
+
+.pin-editor button {
+  justify-self: start;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: #7b5cb8;
+  color: #fff;
+}
+
+.map-zoom {
+  position: absolute;
+  z-index: 900;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  overflow: hidden;
+  border: 2px solid #4b4540;
+  border-radius: 14px;
+  background: #fffbea;
+  box-shadow: 3px 3px 0 #4b454055;
+}
+
+.map-zoom button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  color: #3b332e;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.map-zoom button + button {
+  border-top: 2px solid #4b454033;
+}
+
+.map-zoom button:disabled {
+  color: #cfc6dc;
+  cursor: default;
+}
+
+.map-zoom button:not(:disabled):active {
+  background: #f1ecf8;
+}
+
+.keep-spot {
+  z-index: 200;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed #4b4540;
+  border-radius: 8px;
+  background: #fffbeacc;
+  font-size: 14px;
+}
+
+.pin-editor pre {
+  max-height: 30vh;
+}
+
+.pin-editor summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pin-editor[open] {
+  gap: 6px;
+}

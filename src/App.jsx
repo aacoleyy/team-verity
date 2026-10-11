@@ -42,10 +42,38 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 import "./App.css";
 import FriendsManager from "./components/FriendsManager.jsx";
+import CampusMap from "./components/CampusMap.jsx";
+import mapBuildings from "./data/buildings.js";
 
 // EVENTS - Real campus events. Do not link to the original PIN listing.
 
 const events = [
+
+  {
+
+    id: "hacklanta-hackathon-2026-10-09",
+
+    title: "Hacklanta Hackathon 2026",
+
+    category: "Career",
+
+    date: "2026-10-09",
+
+    endDate: "2026-10-11",
+
+    time: "Oct 9 – Oct 11 · 36 hours",
+
+    location: "Student Center East",
+
+    buildingId: "student-center-east",
+
+    description: "Hacklanta's back, and this one's bigger than the first. 36 hours straight, festival energy the whole way through: no breaks, no sleep, just building. Whatever your background or experience, there's a seat for you.\n\nThis time, sponsors are on the floor running a live sponsor fair, doing real interviews on the spot, the kind of thing that turns a weekend project into an actual opportunity. Expect real networking, real prizes, and a few weird challenges along the way. Seats are limited, so apply now.\n\n1,000+ STUDENTS ACROSS THE US\nFREE FOR ACCEPTED PARTICIPANTS",
+
+    flyerUrl: "/events/hacklanta-2026.jpg",
+
+    sourceUrl: null,
+
+  },
 
   {
 
@@ -307,6 +335,11 @@ const buildings = [
 
 const categories = ["All", "Social", "Academic", "Career", "Wellness"];
 
+// Bottom sheet heights (App.css .sheet-*) and the nav bar under it, used to keep the selected map pin above the sheet.
+const SHEET_HEIGHTS = { collapsed: 82, half: 230, expanded: 370 };
+
+const NAV_HEIGHT = 69;
+
 const iconFor = {
 
   Social: SportsEsportsRoundedIcon,
@@ -360,6 +393,51 @@ const demoFriends = [
 const normalize = (value) =>
 
   String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const startMinutes = (time) => {
+
+  const match = String(time || "").match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+
+  if (!match) return 0;
+
+  const hours = (Number(match[1]) % 12) + (match[3].toUpperCase() === "PM" ? 12 : 0);
+
+  return hours * 60 + Number(match[2]);
+
+};
+
+const byDate = (a, b) =>
+
+  a.date.localeCompare(b.date) || startMinutes(a.time) - startMinutes(b.time);
+
+// End time is the second "h:mm AM/PM" in the time string; without one the event runs to the end of its last day.
+const endMinutes = (time) => {
+
+  const matches = [...String(time || "").matchAll(/(\d{1,2}):(\d{2})\s*(AM|PM)/gi)];
+
+  if (matches.length < 2) return 24 * 60;
+
+  const [, h, m, ampm] = matches[1];
+
+  return ((Number(h) % 12) + (ampm.toUpperCase() === "PM" ? 12 : 0)) * 60 + Number(m);
+
+};
+
+const atMinutes = (date, minutes) => {
+
+  const day = new Date(`${date}T00:00:00`);
+
+  day.setMinutes(minutes);
+
+  return day;
+
+};
+
+const isHappeningNow = (event, now) =>
+
+  atMinutes(event.date, startMinutes(event.time)) <= now &&
+
+  now < atMinutes(event.endDate || event.date, endMinutes(event.time));
 
 const displayDate = (date) =>
 
@@ -785,13 +863,51 @@ export default function App() {
 
   const [buildingId, setBuildingId] = useState(null);
 
-  const [sheet, setSheet] = useState("half");
+  const [sheet, setSheet] = useState("collapsed");
+
+  const mapFrameRef = useRef(null);
+
+  const [mapInset, setMapInset] = useState(0);
+
+  useEffect(() => {
+
+    if (tab !== "map") return;
+
+    const measure = () => {
+
+      const frame = mapFrameRef.current;
+
+      if (!frame) return;
+
+      const sheetTop = window.innerHeight - NAV_HEIGHT - SHEET_HEIGHTS[sheet];
+
+      setMapInset(Math.max(0, Math.round(frame.getBoundingClientRect().bottom - sheetTop)));
+
+    };
+
+    measure();
+
+    window.addEventListener("resize", measure);
+
+    return () => window.removeEventListener("resize", measure);
+
+  }, [tab, sheet]);
 
   const [profileOpen, setProfileOpen] = useState(false);
 
   const [profilePage, setProfilePage] = useState(null);
 
   const [savedView, setSavedView] = useState("mine");
+
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+
+    const timer = setInterval(() => setNow(new Date()), 60 * 1000);
+
+    return () => clearInterval(timer);
+
+  }, []);
 
   useEffect(() => {
 
@@ -859,7 +975,9 @@ export default function App() {
 
       ].some((value) => normalize(value).includes(normalize(query)))
 
-  );
+  ).sort(byDate);
+
+  const happeningNow = filtered.filter((event) => isHappeningNow(event, now));
 
   const matches = buildings.filter((building) =>
 
@@ -871,19 +989,30 @@ export default function App() {
 
   );
 
-  const chosen = buildings.find((building) => building.id === buildingId);
+  // Map-only pins (Greenway, Hurt Park, ...) aren't in `buildings`, so fall back to the map's list for the name.
+  const chosen =
+    buildings.find((building) => building.id === buildingId) ||
+    mapBuildings.find((building) => building.id === buildingId);
+
+  const mapEventCounts = {};
+
+  for (const event of events) {
+
+    mapEventCounts[event.buildingId] = (mapEventCounts[event.buildingId] ?? 0) + 1;
+
+  }
 
   const buildingEvents = events.filter(
 
     (event) => event.buildingId === buildingId
 
-  );
+  ).sort(byDate);
 
   const savedEvents = events
 
     .filter((event) => saved.includes(event.id))
 
-    .sort((a, b) => a.date.localeCompare(b.date));
+    .sort(byDate);
 
   const upcomingCount = savedEvents.filter(
 
@@ -1219,6 +1348,50 @@ export default function App() {
                   ))}
 
                 </div>
+
+                {happeningNow.length > 0 && (
+
+                  <section className="happening-now" aria-label="Happening now">
+
+                    <h2 className="happening-now-title">
+
+                      <span className="live-dot" aria-hidden="true" />
+
+                      Happening Now!
+
+                    </h2>
+
+                    <div className="events-grid happening-grid">
+
+                      {happeningNow.map((event) => (
+
+                        <EventCard
+
+                          key={event.id}
+
+                          event={event}
+
+                          isSaved={saved.includes(event.id)}
+
+                          onSave={() => toggleSaved(event.id)}
+
+                          onOpen={() => setSelected(event)}
+
+                        />
+
+                      ))}
+
+                    </div>
+
+                    <div className="section-divider">
+
+                      <span>Upcoming Events</span>
+
+                    </div>
+
+                  </section>
+
+                )}
 
                 <div className="events-grid">
 
@@ -1587,53 +1760,25 @@ export default function App() {
 
                 )}
 
-                {/* Replace this placeholder with your teammate's map */}
+                <div className="map-frame" ref={mapFrameRef}>
 
-                <div className="map-illustration">
+                  <CampusMap
 
-                  <MapRoundedIcon sx={{ fontSize: 64 }} />
+                    onSelectBuilding={(id) => {
 
-                  <strong>Campus map</strong>
+                      setBuildingId(id);
 
-                  <span>
+                      setSheet("half");
 
-                    Connect your teammate's interactive map here.
+                    }}
 
-                  </span>
+                    selectedBuildingId={buildingId}
 
-                  <div className="map-pin-list">
+                    eventCounts={mapEventCounts}
 
-                    {buildings.map((building) => (
+                    bottomInset={mapInset}
 
-                      <button
-
-                        key={building.id}
-
-                        className={
-
-                          buildingId === building.id ? "chosen" : ""
-
-                        }
-
-                        onClick={() => {
-
-                          setBuildingId(building.id);
-
-                          setSheet("half");
-
-                        }}
-
-                      >
-
-                        <LocationOnRoundedIcon fontSize="small" />
-
-                        {building.name}
-
-                      </button>
-
-                    ))}
-
-                  </div>
+                  />
 
                 </div>
 

@@ -168,6 +168,108 @@
   gap: 14px;
 }
 
+.happening-now {
+  margin-bottom: 6px;
+}
+
+.happening-now-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  color: #843b62;
+  margin: 0 0 8px;
+}
+
+/* Compact row cards for live events */
+
+.happening-grid {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.happening-grid .event-tile {
+  min-height: 0;
+  border-radius: 14px;
+}
+
+.happening-grid .tile-open {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 8px 40px 8px 8px;
+}
+
+.happening-grid .tile-art {
+  grid-column: 1;
+  grid-row: 1 / 4;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+}
+
+.happening-grid .tile-category,
+.happening-grid .tile-title,
+.happening-grid .tile-date {
+  grid-column: 2;
+}
+
+.happening-grid .tile-category {
+  font-size: 9px;
+}
+
+.happening-grid .tile-title {
+  font-size: 13px;
+  min-height: 0;
+  -webkit-line-clamp: 1;
+}
+
+.happening-grid .tile-date {
+  margin-top: 0;
+}
+
+.happening-grid .tile-save {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 14px;
+  color: #843b62;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.section-divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(132, 59, 98, 0.22);
+}
+
+.live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e0435c;
+  box-shadow: 0 0 0 0 rgba(224, 67, 92, 0.6);
+  animation: live-pulse 1.6s ease-out infinite;
+}
+
+@keyframes live-pulse {
+  to {
+    box-shadow: 0 0 0 8px rgba(224, 67, 92, 0);
+  }
+}
+
 .event-tile {
   position: relative;
   border-radius: 20px;
@@ -245,7 +347,6 @@
   letter-spacing: 0.5px;
 }
 
-.
 .tile-art {
   display: grid;
   place-items: center;
@@ -471,6 +572,7 @@
   line-height: 1.7;
   color: var(--ink);
   margin: 22px 0;
+  white-space: pre-line;
 }
 
 /* CATEGORY HIGHLIGHT */
@@ -581,49 +683,20 @@
   padding: 8px;
 }
 
-/* TEMPORARY MAP PLACEHOLDER */
+/* CAMPUS MAP (src/components/CampusMap.jsx) — drag to move, pinch/scroll or +/- to zoom */
 
-.map-illustration {
-  height: 440px;
+/* Fills the screen down to just above the collapsed Explore campus panel. */
+.map-frame {
+  position: relative;
+  height: max(320px, calc(100dvh - 320px));
   border-radius: 18px;
-  background: linear-gradient(135deg, #cde5cb, #d4e6e8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #315b43;
-  text-align: center;
-  padding: 20px;
+  overflow: hidden;
+  background: #a3d47c;
+  isolation: isolate;
 }
 
-.map-illustration > span {
-  font-size: 12px;
-}
-
-.map-pin-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  justify-content: center;
-  margin-top: 14px;
-}
-
-.map-pin-list button {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  border: 0;
-  border-radius: 999px;
-  padding: 8px;
-  background: var(--cream);
-  color: var(--berry);
-  font-size: 10px;
-}
-
-.map-pin-list button.chosen {
-  background: var(--berry);
-  color: white;
+.map-frame .campus-map {
+  min-height: 0;
 }
 
 /* MAP EVENTS BOTTOM SHEET */
@@ -655,7 +728,7 @@
 }
 
 .sheet-collapsed {
-  height: 70px;
+  height: 82px;
 }
 
 .sheet-half {
